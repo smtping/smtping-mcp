@@ -1,0 +1,54 @@
+{
+  "name": "@smtping/mcp",
+  "version": "1.0.0",
+  "description": "Official SMTPing MCP server: let Claude, Cursor, VS Code and other AI assistants verify email addresses, clean lists and check spamtrap, disposable, spambot and complainer lists.",
+  "mcpName": "io.github.smtping/smtping-mcp",
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "mcp server",
+    "smtping",
+    "email verification",
+    "email validation",
+    "claude",
+    "cursor"
+  ],
+  "license": "MIT",
+  "homepage": "https://smtping.com/docs#mcp",
+  "bugs": {
+    "url": "https://github.com/smtping/smtping-mcp/issues",
+    "email": "support@smtping.com"
+  },
+  "author": {
+    "name": "SMTPing",
+    "email": "support@smtping.com",
+    "url": "https://smtping.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smtping/smtping-mcp.git"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "smtping-mcp": "index.js"
+  },
+  "files": [
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node index.js --check"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.0",
+    "@smtping/sdk": "^1.0.0",
+    "zod": "^3.25.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

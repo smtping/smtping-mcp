@@ -1,0 +1,28 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "io.github.smtping/smtping-mcp",
+  "title": "SMTPing Email Verification",
+  "description": "Verify email addresses, clean lists and check spamtrap, disposable, spambot and complainer lists.",
+  "websiteUrl": "https://smtping.com/email-verification-mcp",
+  "repository": {
+    "url": "https://github.com/smtping/smtping-mcp",
+    "source": "github"
+  },
+  "version": "1.0.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@smtping/mcp",
+      "version": "1.0.0",
+      "transport": { "type": "stdio" },
+      "environmentVariables": [
+        {
+          "name": "SMTPING_API_KEY",
+          "description": "Your SMTPing API key, from https://app.smtping.com",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
