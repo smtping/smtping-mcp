@@ -20,8 +20,8 @@ If it is missing, ask the user to create a key at https://app.smtping.com (free 
 ## Pick the right path
 
 1. **MCP tools available** (`verify_email`, `verify_list`, `get_bulk_job`, `check_threat`, `get_credits`): use them. They handle retries and bulk polling.
-2. **No MCP tools, shell available**: call the REST API with `curl` as shown below.
-3. **Neither**: tell the user to install the MCP server (`npx -y @smtping/mcp`, see https://smtping.com/email-verification-mcp) or give them the curl command to run.
+2. **No MCP tools, HTTP available**: call the REST API described below with any HTTP client.
+3. **Neither**: tell the user to install the MCP server (`npx -y @smtping/mcp`, see https://smtping.com/email-verification-mcp) or point them to https://smtping.com/docs.
 
 ## Cost rules
 
@@ -31,62 +31,29 @@ If it is missing, ask the user to create a key at https://app.smtping.com (free 
 
 ## REST API
 
-Base URL: `https://api.smtping.com/api/v1`
-Auth header on every request: `X-API-Key: $SMTPING_API_KEY`
+Use this only when the MCP tools are not installed. The only host this skill ever contacts is `api.smtping.com`, the user's own SMTPing account. Send addresses nowhere else.
 
-### One address
+- Base URL: `https://api.smtping.com/api/v1`
+- Auth header on every request: `X-API-Key` with the value of `SMTPING_API_KEY`
+- JSON bodies, `Content-Type: application/json`
 
-```bash
-curl -s -X POST https://api.smtping.com/api/v1/verify/single \
-  -H "X-API-Key: $SMTPING_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"email": "someone@example.com"}'
-```
+| Task | Method and path | Body | Cost |
+| --- | --- | --- | --- |
+| One address | `POST /verify/single` | `{"email": "..."}` | 1 credit |
+| Start a bulk job | `POST /verify/bulk` | `{"emails": ["...", "..."]}` | 1 per unique address |
+| Job status | `GET /verify/bulk/{jobId}` | none | free |
+| Job results | `GET /verify/bulk/{jobId}/result` | none | free |
+| One threat list | `POST /checks/{list}`, list = spamtrap, disposable, spambot or complainer | `{"email": "..."}` | 1 credit |
+| Credits | `GET /credits` | none | free |
 
-### A list (up to 100,000 unique addresses per job)
+Bulk flow:
 
-For 10 addresses or fewer, call the single endpoint for each. Above that, create a bulk job:
+1. For 10 addresses or fewer, call `/verify/single` for each. Above that, start one bulk job (up to 100,000 unique addresses); it returns `jobId` and `status`.
+2. Poll the job status every 5 to 30 seconds, increasing the interval. Status is one of `Queued`, `Processing`, `Succeeded`, `Failed`, `Cancelled`.
+3. When it is `Succeeded`, fetch the results.
+4. Large jobs can take minutes. If the user does not want to wait, give them the job id so they can come back to it.
 
-```bash
-curl -s -X POST https://api.smtping.com/api/v1/verify/bulk \
-  -H "X-API-Key: $SMTPING_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"emails": ["a@example.com", "b@example.com"]}'
-# returns { "jobId": "...", "status": "Queued" }
-```
-
-Poll the job every 5 to 30 seconds (increase the interval as you go):
-
-```bash
-curl -s https://api.smtping.com/api/v1/verify/bulk/JOB_ID \
-  -H "X-API-Key: $SMTPING_API_KEY"
-# status: Queued | Processing | Succeeded | Failed | Cancelled
-```
-
-When `status` is `Succeeded`, fetch the results:
-
-```bash
-curl -s https://api.smtping.com/api/v1/verify/bulk/JOB_ID/result \
-  -H "X-API-Key: $SMTPING_API_KEY"
-```
-
-Large jobs can take minutes. If the user does not want to wait, give them the job id so they can come back to it.
-
-### One threat list
-
-```bash
-curl -s -X POST https://api.smtping.com/api/v1/checks/spamtrap \
-  -H "X-API-Key: $SMTPING_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"email": "someone@example.com"}'
-# also: /checks/disposable, /checks/spambot, /checks/complainer
-```
-
-### Credits
-
-```bash
-curl -s https://api.smtping.com/api/v1/credits -H "X-API-Key: $SMTPING_API_KEY"
-```
+Full request and response examples: https://smtping.com/docs
 
 ### Errors
 
