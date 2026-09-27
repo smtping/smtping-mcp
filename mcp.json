@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "smtping": {
+      "command": "npx",
+      "args": ["-y", "@smtping/mcp"],
+      "env": { "SMTPING_API_KEY": "${env:SMTPING_API_KEY}" }
+    }
+  }
+}
