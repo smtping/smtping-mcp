@@ -62,9 +62,30 @@ claude mcp add smtping -e SMTPING_API_KEY=sk_live_your_key_here -- npx -y @smtpi
 }
 ```
 
-### Windows
+### Windows troubleshooting
 
-If `npx` is not found, use `"command": "cmd"` and `"args": ["/c", "npx", "-y", "@smtping/mcp"]`.
+**`npx` is not found**: use `"command": "cmd"` and `"args": ["/c", "npx", "-y", "@smtping/mcp"]`.
+
+**"Request timed out" or "Server disconnected" on first start**: the first `npx` run downloads the package and can take longer than the client's 60 second startup limit. Install the server once, then point the client to it:
+
+1. In a terminal: `npm install -g @smtping/mcp`
+2. Replace the `smtping` block with:
+
+```json
+"smtping": {
+  "command": "node",
+  "args": ["C:\\Users\\YOUR_NAME\\AppData\\Roaming\\npm\\node_modules\\@smtping\\mcp\\index.js"],
+  "env": { "SMTPING_API_KEY": "sk_live_your_key_here" }
+}
+```
+
+Replace `YOUR_NAME` with your Windows user folder (spaces are fine) and use double backslashes. Run `echo %APPDATA%` to see the exact path. This form also avoids issues with `.cmd` launchers when the user folder contains a space.
+
+3. Quit the client completely (tray icon > Quit) and reopen it.
+
+To update later: `npm install -g @smtping/mcp@latest`.
+
+**Logs**: Claude Desktop writes them to `%APPDATA%\Claude\logs\mcp-server-smtping.log`.
 
 ## Privacy
 
@@ -76,5 +97,6 @@ Addresses are sent to the SMTPing API only when a tool is called. See the [priva
 - [API documentation](https://smtping.com/docs)
 - [Pricing](https://smtping.com/pricing)
 - Support: support@smtping.com
+- Blog: [SMTPedia](https://smtpedia.com)
 
 MIT License
