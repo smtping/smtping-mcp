@@ -4,6 +4,10 @@ Official [Model Context Protocol](https://modelcontextprotocol.io) server for [S
 
 > "Verify these 40 leads and tell me which ones are safe to email."
 
+## Remote server (no install)
+
+Prefer not to run Node? Add `https://mcp.smtping.com/mcp` as a custom connector in Claude (Settings > Connectors) or ChatGPT, then sign in with your SMTPing API key. Same 5 tools, OAuth 2.1, nothing stored on the server. Source: [smtping/smtping-mcp-remote](https://github.com/smtping/smtping-mcp-remote).
+
 ## Tools
 
 | tool | what it does | credits |

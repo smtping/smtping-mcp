@@ -1,6 +1,6 @@
 {
   "name": "@smtping/mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Official SMTPing MCP server: let Claude, Cursor, VS Code and other AI assistants verify email addresses, clean lists and check spamtrap, disposable, spambot and complainer lists.",
   "mcpName": "io.github.smtping/smtping-mcp",
   "keywords": [

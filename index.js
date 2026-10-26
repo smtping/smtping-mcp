@@ -4,7 +4,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod';
 import { Smtping } from '@smtping/sdk';
 
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 const MAX_ROWS = 1000;
 const WAIT_SECONDS = 120;
 
